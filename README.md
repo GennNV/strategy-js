@@ -7,9 +7,10 @@ El patrón **Strategy** nos permite encapsular cada algoritmo en su propia clase
 
 ## 📂 Archivos
 
-- `crudoIfElse.js`: versión sin patrón.
-- `strategySort.js`: implementación con patrón Strategy.
-- `demo.html`: demo interactiva en navegador.
+- `crudoIfElse.js`: Versión sin patrón.
+- `strategyClases.js`: Implementación con patrón Strategy usando Clases.
+- `strategyArrows.js`: Implementación con patrón Strategy usando Arrow Functions.
+- `index.html`: Demo interactiva en navegador.
 
 ## ✅ Ventajas
 
@@ -23,8 +24,4 @@ El patrón **Strategy** nos permite encapsular cada algoritmo en su propia clase
 
 ## 🚀 Ejecución
 
-### Node.js
-
-```bash
-node strategySort.js
-```
+### HTML
