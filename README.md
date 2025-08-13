@@ -21,6 +21,7 @@ De esta manera el _Contexto_ se vuelve independiente de cada estrategia, permiti
 - `strategyClases.js`: Implementación con patrón Strategy usando Clases.
 - `strategyArrows.js`: Implementación con patrón Strategy usando Arrow Functions.
 - `index.html`: Demo interactiva en navegador.
+- `assets`: Iconos usado en demo.
 
 ## ✅ Ventajas
 
