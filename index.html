@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Demo Patrón Strategy - Ordenamiento de Arrays</title>
+  </title>
+
+</head>
+
+<body class="bg-[#30011E] flex flex-col items-center justify-center">
+  <h1 class="text-4xl font-bold text-[#BCBDC0] text-center mt-10">Patrón Strategy - Ordenamiento de Arrays</h1>
+  <img src="./assets/jsicon.png" alt="jsicon" class="size-10 mt-5">
+
+
+  <p class="text-[#BCBDC0] text-center mt-10">Datos originales: <span id="original"
+      class="font-bold text-xl text-[#FEE440]"></span>
+  </p>
+
+  <label for="strategySelect" class="text-[#BCBDC0] text-center mt-10">Seleccionar estrategia:</label>
+  <div class="flex items-center gap-4">
+    <select id="strategySelect" class="bg-[#BCBDC0] text-black rounded-md p-2">
+      <option value="asc">Ascendente</option>
+      <option value="desc">Descendente</option>
+      <option value="none">Sin ordenar</option>
+    </select>
+
+    <button id="sortBtn" class="bg-[#FEE440] text-black rounded-md p-2 text-sm h-8 text-center ">Ordenar</button>
+
+  </div>
+
+  <div class="result text-[#FEE440] text-center mt-10 font-bold text-xl" id="result">—</div>
+
+  <!-- Cargar las clases de Strategy -->
+  <script src="./src/strategyClases.js"></script>
+
+  <!-- Script para manejar la interacción -->
+  <script>
+    const data = [5, 3, 8, 1];
+    document.getElementById('original').textContent = data.join(', ');
+
+    const context = new SortContext(new AscSortStrategy());
+
+    document.getElementById('sortBtn').addEventListener('click', () => {
+      const selected = document.getElementById('strategySelect').value;
+
+      if (selected === 'asc') context.setStrategy(new AscSortStrategy());
+      if (selected === 'desc') context.setStrategy(new DescSortStrategy());
+      if (selected === 'none') context.setStrategy(new NoSortStrategy());
+
+      const sorted = context.sort(data);
+      document.getElementById('result').textContent = `${sorted.join(', ')}`;
+    });
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</body>
+
+</html>
