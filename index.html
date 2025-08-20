@@ -36,20 +36,20 @@
 
   <!-- Script para manejar la interacción -->
   <script>
-    const data = [5, 3, 8, 1];
+    const data = [5, 3, 8, 1]; // datos originales
     document.getElementById('original').textContent = data.join(', ');
 
-    const context = new SortContext(new AscSortStrategy());
+    const context = new SortContext(new AscSortStrategy()); // contexto con la estrategia ascendente
 
     document.getElementById('sortBtn').addEventListener('click', () => {
-      const selected = document.getElementById('strategySelect').value;
+      const selected = document.getElementById('strategySelect').value; // valor seleccionado
 
-      if (selected === 'asc') context.setStrategy(new AscSortStrategy());
-      if (selected === 'desc') context.setStrategy(new DescSortStrategy());
-      if (selected === 'none') context.setStrategy(new NoSortStrategy());
+      if (selected === 'asc') context.setStrategy(new AscSortStrategy()); // si el valor es ascendente, se setea la estrategia ascendente
+      if (selected === 'desc') context.setStrategy(new DescSortStrategy()); // si el valor es descendente, se setea la estrategia descendente
+      if (selected === 'none') context.setStrategy(new NoSortStrategy()); // si el valor es sin ordenar, se setea la estrategia sin ordenar
 
-      const sorted = context.sort(data);
-      document.getElementById('result').textContent = `${sorted.join(', ')}`;
+      const sorted = context.sort(data); // se ejecuta la estrategia
+      document.getElementById('result').textContent = `${sorted.join(', ')}`; // se muestra el resultado
     });
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
