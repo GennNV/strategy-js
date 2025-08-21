@@ -2,58 +2,561 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Demo Patrón Strategy - Ordenamiento de Arrays</title>
-  </title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Patrón Strategy - Demo & README Interactivo</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind config (optional fonts/sizing)
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: [
+              "Inter",
+              "system-ui",
+              "Avenir",
+              "Segoe UI",
+              "Roboto",
+              "Helvetica",
+              "Arial",
+              "sans-serif",
+            ],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    /* ========================================
+     * ESTILOS PERSONALIZADOS
+     * ======================================== */
 
+    /* Personalización de scrollbar para mejor apariencia */
+    ::-webkit-scrollbar {
+      height: 10px;
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 9999px;
+    }
+
+    .dark ::-webkit-scrollbar-thumb {
+      background: #374151;
+    }
+
+    .light ::-webkit-scrollbar-thumb {
+      background: #e5e7eb;
+    }
+
+    /* ========================================
+     * ESTILOS PARA BLOQUES DE CÓDIGO
+     * ======================================== */
+    pre code {
+      white-space: pre;
+      /* Preservar espacios en blanco en el código */
+    }
+  </style>
 </head>
 
-<body class="bg-[#30011E] flex flex-col items-center justify-center">
-  <h1 class="text-4xl font-bold text-[#BCBDC0] text-center mt-10">Patrón Strategy - Ordenamiento de Arrays</h1>
-  <img src="./assets/jsicon.png" alt="jsicon" class="size-10 mt-5">
-  <a href="./pages/teoria.html" class="text-[#BCBDC0] text-center mt-10">Teoría</a>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 font-sans">
+  <!-- Page container -->
+  <div class="min-h-screen">
+    <!-- Top bar -->
+    <header
+      class="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl">🧠</span>
+          <h1 class="text-xl md:text-2xl font-bold">
+            Patrón Strategy — Ejemplo Ordenamiento de Arrays (JavaScript)
+          </h1>
+        </div>
+        <div class="ml-auto flex items-center gap-2">
+          <button id="btnTheme"
+            class="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm">
+            Cambiar tema
+          </button>
+          <a href="#demo" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm">Ir al
+            Demo</a>
+        </div>
+      </div>
+    </header>
 
-  <p class="text-[#BCBDC0] text-center mt-10">Datos originales: <span id="original"
-      class="font-bold text-xl text-[#FEE440]"></span>
-  </p>
+    <!-- Main -->
+    <main class="max-w-6xl mx-auto px-4 py-8 grid lg:grid-cols-[1fr,380px] gap-8">
+      <!-- Left Content -->
+      <section class="space-y-8">
+        <!-- Motivación -->
+        <article id="motivacion"
+          class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+          <h2 class="text-xl font-semibold mb-3">🎯 Motivación</h2>
+          <p class="leading-relaxed">
+            Cuando tenemos múltiples formas de ejecutar un mismo algoritmo (p.
+            ej. ordenar ascendente, descendente, sin ordenar), es común caer
+            en condicionales
+            <code class="px-1 rounded bg-slate-100 dark:bg-slate-700">if/else</code>
+            que dificultan la extensión. El patrón
+            <strong>Strategy</strong> nos permite encapsular cada algoritmo en
+            su propia clase o función e intercambiarlo fácilmente.
+          </p>
+        </article>
 
-  <label for="strategySelect" class="text-[#BCBDC0] text-center mt-10">Seleccionar estrategia:</label>
-  <div class="flex items-center gap-4">
-    <select id="strategySelect" class="bg-[#BCBDC0] text-black rounded-md p-2">
-      <option value="asc">Ascendente</option>
-      <option value="desc">Descendente</option>
-      <option value="none">Sin ordenar</option>
-    </select>
+        <!-- Problema de ejemplo -->
+        <article id="problema"
+          class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+          <h2 class="text-xl font-semibold mb-3">❗❗ Problema de Ejemplo</h2>
+          <p class="leading-relaxed">
+            Imagina que desarrollas una app de navegación. Empezaste generando
+            rutas para autos; luego usuarios a pie, transporte público,
+            ciclistas… Cada nueva variante obligaba a modificar la clase
+            principal y se volvió inmanejable. Cualquier mínimo cambio
+            impactaba en todo.
+          </p>
+        </article>
 
-    <button id="sortBtn" class="bg-[#FEE440] text-black rounded-md p-2 text-sm h-8 text-center ">Ordenar</button>
+        <!-- Solución -->
+        <article id="solucion"
+          class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+          <h2 class="text-xl font-semibold mb-3">✔ Solución al Ejemplo</h2>
+          <p class="leading-relaxed">
+            Strategy propone separar los algoritmos en entidades
+            independientes llamadas <strong>Estrategias</strong>. La clase
+            original pasa a ser el <strong>Contexto</strong>, que mantiene una
+            referencia a una estrategia y <em>delegará</em> en ella la
+            ejecución. El cliente selecciona cuál estrategia usar y se la pasa
+            al Contexto. Así, el Contexto queda desacoplado de cada
+            implementación y se pueden agregar o modificar algoritmos sin
+            tocar el código del resto.
+          </p>
+        </article>
 
+        <!-- Ventajas / Desventajas -->
+        <div class="grid md:grid-cols-2 gap-6">
+          <article
+            class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+            <h3 class="text-lg font-semibold mb-3">✅ Ventajas</h3>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>Cumple el <strong>principio Open/Closed</strong>.</li>
+              <li>Código más limpio y organizado (<strong>SRP</strong>).</li>
+              <li>
+                Bajo acoplamiento: el contexto no conoce detalles de cada
+                estrategia.
+              </li>
+            </ul>
+          </article>
+          <article
+            class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+            <h3 class="text-lg font-semibold mb-3">⚠️ Desventajas</h3>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>
+                Más clases/archivos: puede ser sobre-diseño en casos simples.
+              </li>
+            </ul>
+          </article>
+        </div>
+
+        <!-- Archivos (acordeón) -->
+        <article id="archivos"
+          class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+          <h2 class="text-xl font-semibold mb-4">📂 Archivos</h2>
+          <div class="space-y-3" id="filesAccordion">
+            <!-- Item: crudoIfElse.js -->
+            <details class="group rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <summary
+                class="flex items-center gap-3 cursor-pointer select-none px-4 py-3 bg-slate-50 dark:bg-slate-900/40 hover:bg-slate-100 dark:hover:bg-slate-900/60">
+                <span class="font-medium">crudoIfElse.js</span>
+                <span class="ml-auto text-xs opacity-70">Versión sin patrón</span>
+              </summary>
+              <div class="p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700">
+                <div class="relative">
+                  <button class="copy absolute right-2 top-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-700">
+                    Copiar
+                  </button>
+                  <pre
+                    class="overflow-auto text-sm rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50 dark:bg-slate-900"><code id="code-ifelse">function ordenar(arr, tipo) {
+  if (tipo === 'asc') {
+    return [...arr].sort((a,b) => a - b);
+  } else if (tipo === 'desc') {
+    return [...arr].sort((a,b) => b - a);
+  } else if (tipo === 'none') {
+    return [...arr];
+  } else {
+    throw new Error('Tipo no soportado');
+  }
+}
+
+const datos = [5,1,9,2,7];
+console.log(ordenar(datos, 'asc'));</code></pre>
+                </div>
+              </div>
+            </details>
+
+            <!-- Item: strategyClases.js -->
+            <details class="group rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <summary
+                class="flex items-center gap-3 cursor-pointer select-none px-4 py-3 bg-slate-50 dark:bg-slate-900/40 hover:bg-slate-100 dark:hover:bg-slate-900/60">
+                <span class="font-medium">strategyClases.js</span>
+                <span class="ml-auto text-xs opacity-70">Patrón Strategy con Clases</span>
+              </summary>
+              <div class="p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700">
+                <div class="relative">
+                  <button class="copy absolute right-2 top-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-700">
+                    Copiar
+                  </button>
+                  <pre
+                    class="overflow-auto text-sm rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50 dark:bg-slate-900"><code id="code-clases">// Estrategia (interfaz implícita)
+class EstrategiaOrden {
+  ordenar(arr) { throw new Error('Implementar'); }
+}
+
+class Ascendente extends EstrategiaOrden {
+  ordenar(arr) { return [...arr].sort((a,b) => a - b); }
+}
+class Descendente extends EstrategiaOrden {
+  ordenar(arr) { return [...arr].sort((a,b) => b - a); }
+}
+class SinOrden extends EstrategiaOrden {
+  ordenar(arr) { return [...arr]; }
+}
+
+// Contexto
+class Ordenador {
+  constructor(estrategia) { this.estrategia = estrategia; }
+  setEstrategia(estrategia) { this.estrategia = estrategia; }
+  ejecutar(arr) { return this.estrategia.ordenar(arr); }
+}
+
+// Uso
+const datos = [5,1,9,2,7];
+const ctx = new Ordenador(new Ascendente());
+console.log(ctx.ejecutar(datos));
+ctx.setEstrategia(new Descendente());
+console.log(ctx.ejecutar(datos));</code></pre>
+                </div>
+              </div>
+            </details>
+
+            <!-- Item: strategyArrows.js -->
+            <details class="group rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <summary
+                class="flex items-center gap-3 cursor-pointer select-none px-4 py-3 bg-slate-50 dark:bg-slate-900/40 hover:bg-slate-100 dark:hover:bg-slate-900/60">
+                <span class="font-medium">strategyArrows.js</span>
+                <span class="ml-auto text-xs opacity-70">Patrón Strategy con Functions</span>
+              </summary>
+              <div class="p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700">
+                <div class="relative">
+                  <button class="copy absolute right-2 top-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-700">
+                    Copiar
+                  </button>
+                  <pre
+                    class="overflow-auto text-sm rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50 dark:bg-slate-900"><code id="code-arrows">const estrategias = {
+  asc: arr => [...arr].sort((a,b) => a - b),
+  desc: arr => [...arr].sort((a,b) => b - a),
+  none: arr => [...arr]
+};
+
+const ejecutar = (arr, estrategia) => estrategias[estrategia](arr);
+
+const datos = [5,1,9,2,7];
+console.log(ejecutar(datos, 'asc'));
+console.log(ejecutar(datos, 'desc'));</code></pre>
+                </div>
+              </div>
+            </details>
+          </div>
+        </article>
+
+        <!-- Ejecución / HTML anchor -->
+        <article id="demo"
+          class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+          <div class="flex items-center gap-3 mb-4">
+            <h2 class="text-xl font-semibold">
+              🚀 Ejecución de prueba (Demo)
+            </h2>
+            <span class="text-xs px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">HTML</span>
+          </div>
+
+          <!-- Controls -->
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm mb-2">Ingresa números separados por coma</label>
+              <input id="inputArray"
+                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"
+                value="5,1,9,2,7" />
+              <p class="text-xs mt-1 opacity-70">Ej.: 10, 3, 7, 2</p>
+
+              <div class="mt-4 flex flex-wrap items-center gap-2">
+                <label class="text-sm">Estrategia:</label>
+                <select id="selectStrategy"
+                  class="px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
+                  <option value="asc">Ascendente</option>
+                  <option value="desc">Descendente</option>
+                  <option value="none">Sin ordenar</option>
+                </select>
+                <button id="btnRun"
+                  class="ml-auto md:ml-0 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white">
+                  Aplicar
+                </button>
+                <button id="btnRandom" class="px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-600">
+                  Aleatorio
+                </button>
+                <button id="btnClear" class="px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-600">
+                  Limpiar
+                </button>
+              </div>
+            </div>
+
+            <!-- Result card -->
+            <div class="bg-slate-50 dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+              <h3 class="font-medium mb-3">Resultado</h3>
+              <div class="grid gap-3 text-sm">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700">Entrada</span>
+                  <div id="viewInput" class="truncate"></div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700">Estrategia</span>
+                  <div id="viewStrategy" class="truncate"></div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-200 dark:bg-emerald-800/40">Salida</span>
+                  <div id="viewOutput" class="font-semibold"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Code comparison tabs -->
+          <div class="mt-8">
+            <div class="flex gap-2 mb-3" role="tablist">
+              <button data-tab="ifelse" class="tab px-3 py-1.5 rounded-xl border dark:border-slate-700 text-sm">
+                Sin patrón
+              </button>
+              <button data-tab="clases" class="tab px-3 py-1.5 rounded-xl border dark:border-slate-700 text-sm">
+                Strategy (Clases)
+              </button>
+              <button data-tab="arrows" class="tab px-3 py-1.5 rounded-xl border dark:border-slate-700 text-sm">
+                Strategy (Functions)
+              </button>
+            </div>
+            <div class="tabpanels">
+              <pre data-panel="ifelse"
+                class="panel hidden overflow-auto text-sm rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50 dark:bg-slate-900"><code>function ordenar(arr, tipo) {
+  if (tipo === 'asc') return [...arr].sort((a,b) => a-b);
+  if (tipo === 'desc') return [...arr].sort((a,b) => b-a);
+  if (tipo === 'none') return [...arr];
+  throw new Error('Tipo no soportado');
+}</code></pre>
+
+              <pre data-panel="clases"
+                class="panel hidden overflow-auto text-sm rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50 dark:bg-slate-900"><code >class Ascendente { ordenar(arr){return [...arr].sort((a,b)=>a-b);} }
+class Descendente { ordenar(arr){return [...arr].sort((a,b)=>b-a);} }
+class SinOrden { ordenar(arr){return [...arr];} }
+class Ordenador { constructor(estrategia){this.estrategia=estrategia;}
+  setEstrategia(e){this.estrategia=e;} 
+  ejecutar(arr){return this.estrategia.ordenar(arr);} 
+}</code></pre>
+
+              <pre data-panel="arrows"
+                class="panel hidden overflow-auto text-sm rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50 dark:bg-slate-900"><code>const estrategias={
+  asc: arr => [...arr].sort((a,b)=>a-b),
+  desc: arr => [...arr].sort((a,b)=>b-a),
+  none: arr => [...arr]
+};
+const ejecutar=(arr,estrategia)=>estrategias[estrategia](arr);</code></pre>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Right Aside: Índice / Tips -->
+      <aside class="space-y-6">
+        <!-- Índice -->
+        <div
+          class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 sticky top-20">
+          <h3 class="font-semibold mb-3">📑 Índice</h3>
+          <nav class="grid gap-2 text-sm">
+            <a class="hover:underline" href="#motivacion">🎯 Motivación</a>
+            <a class="hover:underline" href="#problema">❗ Problema</a>
+            <a class="hover:underline" href="#solucion">✔ Solución</a>
+            <a class="hover:underline" href="#archivos">📂 Archivos</a>
+            <a class="hover:underline" href="#demo">🚀 Demo</a>
+          </nav>
+        </div>
+
+        <!-- Tip card -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700">
+          <h3 class="font-semibold mb-2">💡 Tip rápido</h3>
+          <p class="text-sm leading-relaxed">
+            Agregar una nueva estrategia (por ejemplo, ordenar por valor
+            absoluto) no requiere tocar el Contexto; solo añade una nueva
+            implementación y conéctala.
+          </p>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="max-w-6xl mx-auto px-4 pb-12 text-xs opacity-70">
+      Basado en README con sección de demo interactiva. Hecho con Tailwind.
+    </footer>
   </div>
 
-  <div class="result text-[#FEE440] text-center mt-10 font-bold text-xl" id="result">—</div>
-
-  <!-- Cargar las clases de Strategy -->
-  <script src="./src/strategyClases.js"></script>
-
-  <!-- Script para manejar la interacción -->
+  <!-- App Script -->
   <script>
-    const data = [5, 3, 8, 1]; // datos originales
-    document.getElementById('original').textContent = data.join(', ');
+    // ========================================
+    // MANEJO DEL TEMA (DARK/LIGHT MODE)
+    // ========================================
+    const btnTheme = document.getElementById("btnTheme");
+    const root = document.documentElement;
 
-    const context = new SortContext(new AscSortStrategy()); // contexto con la estrategia ascendente
+    // Función para cambiar entre tema claro y oscuro
+    const setTheme = (mode) => {
+      if (mode === "dark") {
+        document.body.classList.add("dark");
+      } else {
+        document.body.classList.remove("dark");
+      }
+      localStorage.setItem("theme", mode);
+    };
 
-    document.getElementById('sortBtn').addEventListener('click', () => {
-      const selected = document.getElementById('strategySelect').value; // valor seleccionado
+    // Cargar tema guardado o usar preferencia del sistema
+    const saved = localStorage.getItem("theme");
+    setTheme(
+      saved ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light")
+    );
+    btnTheme.addEventListener("click", () =>
+      setTheme(document.body.classList.contains("dark") ? "light" : "dark")
+    );
 
-      if (selected === 'asc') context.setStrategy(new AscSortStrategy()); // si el valor es ascendente, se setea la estrategia ascendente
-      if (selected === 'desc') context.setStrategy(new DescSortStrategy()); // si el valor es descendente, se setea la estrategia descendente
-      if (selected === 'none') context.setStrategy(new NoSortStrategy()); // si el valor es sin ordenar, se setea la estrategia sin ordenar
-
-      const sorted = context.sort(data); // se ejecuta la estrategia
-      document.getElementById('result').textContent = `${sorted.join(', ')}`; // se muestra el resultado
+    // ========================================
+    // BOTONES DE COPIAR EN ACORDEÓN
+    // ========================================
+    document.querySelectorAll("button.copy").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const codeEl = e.target.parentElement.querySelector("code");
+        navigator.clipboard.writeText(codeEl.textContent.trim());
+        e.target.textContent = "¡Copiado!";
+        setTimeout(() => (e.target.textContent = "Copiar"), 1500);
+      });
     });
-  </script>
-  <script src="https://cdn.tailwindcss.com"></script>
 
+    // ========================================
+    // SISTEMA DE PESTAÑAS PARA COMPARACIÓN DE CÓDIGO
+    // ========================================
+    const tabs = document.querySelectorAll(".tab");
+    const panels = document.querySelectorAll(".panel");
+
+    // Función para mostrar la pestaña seleccionada
+    function showTab(name) {
+      // Ocultar todos los paneles excepto el seleccionado
+      panels.forEach((p) =>
+        p.classList.toggle("hidden", p.dataset.panel !== name)
+      );
+      // Resaltar la pestaña activa
+      tabs.forEach((t) =>
+        t.classList.toggle("bg-slate-700", t.dataset.tab === name)
+      );
+    }
+
+    // Agregar event listeners a todas las pestañas
+    tabs.forEach((t) =>
+      t.addEventListener("click", () => showTab(t.dataset.tab))
+    );
+
+    // Mostrar la primera pestaña por defecto
+    showTab("ifelse");
+
+    // ========================================
+    // IMPLEMENTACIÓN DEL PATRÓN STRATEGY
+    // ========================================
+    // Objeto que contiene todas las estrategias de ordenamiento
+    const estrategias = {
+      asc: (arr) => [...arr].sort((a, b) => a - b),      // Ordenamiento ascendente
+      desc: (arr) => [...arr].sort((a, b) => b - a),     // Ordenamiento descendente
+      none: (arr) => [...arr],                            // Sin ordenamiento (copia del array)
+    };
+
+    // Función que ejecuta la estrategia seleccionada
+    const ejecutar = (arr, estrategia) => estrategias[estrategia](arr);
+
+    // ========================================
+    // FUNCIONES AUXILIARES
+    // ========================================
+    // Convierte string de números separados por coma en array de números
+    const parseArray = (str) =>
+      str
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .map(Number)
+        .filter((n) => !Number.isNaN(n));
+
+    const elInput = document.getElementById("inputArray");
+    const elSelect = document.getElementById("selectStrategy");
+    const elRun = document.getElementById("btnRun");
+    const elRandom = document.getElementById("btnRandom");
+    const elClear = document.getElementById("btnClear");
+    const vIn = document.getElementById("viewInput");
+    const vStr = document.getElementById("viewStrategy");
+    const vOut = document.getElementById("viewOutput");
+
+    function updateView(inputArr, estrategia, outputArr) {
+      vIn.textContent = `[ ${inputArr.join(", ")} ]`;
+      vStr.textContent =
+        estrategia === "asc"
+          ? "Ascendente"
+          : estrategia === "desc"
+            ? "Descendente"
+            : "Sin ordenar";
+      vOut.textContent = `[ ${outputArr.join(", ")} ]`;
+    }
+
+    // ========================================
+    // FUNCIÓN PRINCIPAL DEL DEMO
+    // ========================================
+    // Ejecuta la estrategia seleccionada y actualiza la vista
+    function runDemo() {
+      const inputArr = parseArray(elInput.value);  // Parsear input del usuario
+      const est = elSelect.value;                  // Obtener estrategia seleccionada
+      try {
+        const out = ejecutar(inputArr, est);       // Ejecutar estrategia
+        updateView(inputArr, est, out);            // Actualizar vista
+      } catch (err) {
+        alert(err.message);                        // Mostrar error si algo falla
+      }
+    }
+
+    // ========================================
+    // EVENT LISTENERS
+    // ========================================
+    // Botón ejecutar: corre el demo con los valores actuales
+    elRun.addEventListener("click", runDemo);
+
+    // Botón aleatorio: genera un array aleatorio y lo ejecuta
+    elRandom.addEventListener("click", () => {
+      const n = 6 + Math.floor(Math.random() * 5); // 6..10
+      const arr = Array.from({ length: n }, () =>
+        Math.floor(Math.random() * 100)
+      );
+      elInput.value = arr.join(", ");
+      runDemo();
+    });
+
+    // Botón limpiar: vacía el input y limpia la vista
+    elClear.addEventListener("click", () => {
+      elInput.value = "";
+      updateView([], elSelect.value, []);
+    });
+
+    // Init
+    runDemo();
+  </script>
 </body>
 
 </html>
