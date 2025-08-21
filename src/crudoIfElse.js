@@ -1,3 +1,10 @@
+// ========================================
+// PATRÓN STRATEGY - IMPLEMENTACIÓN SIN PATRÓN
+// ========================================
+// Este código muestra el problema que resuelve el patrón Strategy:
+// múltiples condicionales if/else que hacen difícil la extensión
+// ========================================
+
 function sortArray(data, type) {
   if (type === "asc") {
     return data.sort((a, b) => a - b);
